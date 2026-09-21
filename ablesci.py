@@ -238,7 +238,7 @@ class AbleSciAuto:
             )
 
         except Exception as e:
-        self.log(f"获取CSRF令牌时出错: {str(e)}", "error")
+            self.log(f"获取CSRF令牌时出错: {str(e)}", "error")
 
         return ""
        
