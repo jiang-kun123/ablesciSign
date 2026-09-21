@@ -215,8 +215,12 @@ class AbleSciAuto:
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, 'html.parser')
                 csrf_token = soup.find('input', {'name': '_csrf'})
-                if csrf_token:
-                    return csrf_token.get('value', '')
+                if csrf_token and csrf_token.get('value'):
+                    return csrf_token.get('value')
+
+csrf_token = soup.find('meta', {'name': 'csrf-token'})
+if csrf_token and csrf_token.get('content'):
+    return csrf_token.get('content')
             else:
                 self.log(f"获取CSRF令牌失败，状态码: {response.status_code}", "error")
         except Exception as e:
