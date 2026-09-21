@@ -207,7 +207,7 @@ class AbleSciAuto:
         """代理日志到通知系统"""
         self.notifier.log(message, level)
         
-    def get_csrf_token(self):
+   def get_csrf_token(self):
     """获取CSRF令牌"""
     login_url = "https://www.ablesci.com/site/login"
 
@@ -232,11 +232,15 @@ class AbleSciAuto:
             self.log("登录页中没有找到CSRF令牌", "error")
         else:
             self.log(
-                f"获取CSRF令牌失败，状态码: {response.status_code}", "error")
+                f"获取CSRF令牌失败，状态码: {response.status_code}",
+                "error"
+            )
+
     except Exception as e:
         self.log(f"获取CSRF令牌时出错: {str(e)}", "error")
 
     return ""
+       
     def login(self):
         """执行登录操作"""
         if not self.email or not self.password:
