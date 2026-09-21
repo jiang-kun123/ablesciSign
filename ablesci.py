@@ -237,10 +237,10 @@ class AbleSciAuto:
                     "error"
             )
 
-    except Exception as e:
+        except Exception as e:
         self.log(f"获取CSRF令牌时出错: {str(e)}", "error")
 
-    return ""
+        return ""
        
     def login(self):
         """执行登录操作"""
