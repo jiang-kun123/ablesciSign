@@ -208,25 +208,35 @@ class AbleSciAuto:
         self.notifier.log(message, level)
         
     def get_csrf_token(self):
-        """获取CSRF令牌"""
-        login_url = "https://www.ablesci.com/site/login"
-        try:
-            response = self.session.get(login_url, headers=self.headers, timeout=30)
-            if response.status_code == 200:
-                soup = BeautifulSoup(response.text, 'html.parser')
-                csrf_token = soup.find('input', {'name': '_csrf'})
-                if csrf_token and csrf_token.get('value'):
-                    return csrf_token.get('value')
+    """获取CSRF令牌"""
+    login_url = "https://www.ablesci.com/site/login"
 
-csrf_token = soup.find('meta', {'name': 'csrf-token'})
-if csrf_token and csrf_token.get('content'):
-    return csrf_token.get('content')
-            else:
-                self.log(f"获取CSRF令牌失败，状态码: {response.status_code}", "error")
-        except Exception as e:
-            self.log(f"获取CSRF令牌时出错: {str(e)}", "error")
-        return ''
+    try:
+        response = self.session.get(
+            login_url,
+            headers=self.headers,
+            timeout=30
+        )
 
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, "html.parser")
+
+            csrf_token = soup.find("input", {"name": "_csrf"})
+            if csrf_token and csrf_token.get("value"):
+                return csrf_token.get("value")
+
+            csrf_token = soup.find("meta", {"name": "csrf-token"})
+            if csrf_token and csrf_token.get("content"):
+                return csrf_token.get("content")
+
+            self.log("登录页中没有找到CSRF令牌", "error")
+        else:
+            self.log(
+                f"获取CSRF令牌失败，状态码: {response.status_code}", "error")
+    except Exception as e:
+        self.log(f"获取CSRF令牌时出错: {str(e)}", "error")
+
+    return ""
     def login(self):
         """执行登录操作"""
         if not self.email or not self.password:
